@@ -2,11 +2,12 @@ import { galleryItems } from './gallery-items.js';
 
 const gallery = document.querySelector('.gallery')
 
-const makeGalleryItemMarkup = ({ preview, original, description }) =>
+const makeGalleryItemMarkup = ({preview, original, description }) =>
     `<li class="gallery__item">
     <a class="gallery__link" href="${original}">
         <img
-            class="gallery__image"
+            loading="lazy"
+            class="gallery__image lazyload"
             src="${preview}"
             data-source="${original}"
             alt="${description}"
