@@ -2,7 +2,7 @@ import { galleryItems } from './gallery-items.js';
 
 const gallery = document.querySelector('.gallery')
 
-const makeGalleryItemMarkup = ({preview, original, description }) =>
+const makeGalleryItemMarkup = ({ preview, original, description }) =>
     `<li class="gallery__item">
     <a class="gallery__link" href="${original}">
         <img
@@ -25,17 +25,24 @@ function onImgClick(e) {
         return;
     }
     const instance = createInstance(e.target.dataset.source)
+    console.log(instance)
 
     instance.show()
-
-    gallery.addEventListener('keydown', e => {
-        if (e.code === 'Escape') {
-            instance.close()
-        }
-    })
 }
 
 function createInstance(src) {
     return basicLightbox.create(`
-    <img src="${src}">`)
+    <img src="${src}">`, {
+        onShow: (inst) => {
+            gallery.addEventListener('keydown', e => { onEscClick(e, inst) })
+        },
+        onClose: (inst) => { gallery.removeEventListener('keydown', onEscClick) }
+    })
+}
+
+
+function onEscClick(e, instance) {
+    if (e.code === 'Escape') {
+        instance.close()
+    }
 }
