@@ -24,25 +24,21 @@ function onImgClick(e) {
     if (e.target.nodeName !== 'IMG') {
         return;
     }
-    const instance = createInstance(e.target.dataset.source)
-    console.log(instance)
+
+    const instance = basicLightbox.create(`
+    <img src="${e.target.dataset.source}">`, {
+        onShow: () => {
+            gallery.addEventListener('keydown', onEscClick)
+        },
+        onClose: () => { gallery.removeEventListener('keydown', onEscClick) }
+    })
 
     instance.show()
-}
 
-function createInstance(src) {
-    return basicLightbox.create(`
-    <img src="${src}">`, {
-        onShow: (inst) => {
-            gallery.addEventListener('keydown', e => { onEscClick(e, inst) })
-        },
-        onClose: (inst) => { gallery.removeEventListener('keydown', onEscClick) }
-    })
-}
-
-
-function onEscClick(e, instance) {
-    if (e.code === 'Escape') {
-        instance.close()
+    function onEscClick(e) {
+        if (e.code === 'Escape') {
+            instance.close()
+        }
     }
+
 }
